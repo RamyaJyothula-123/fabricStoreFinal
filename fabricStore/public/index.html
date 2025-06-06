@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fabric Store</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f8f8f8;
+    }
+    h1 {
+      text-align: center;
+      color: #d946ef;
+    }
+    .product {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 15px;
+      max-width: 300px;
+      background-color: #fff;
+      margin: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .product img {
+      width: 100%;
+      border-radius: 10px;
+    }
+    .product-name {
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    .price {
+      color: red;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    .original-price {
+      text-decoration: line-through;
+      color: #777;
+      font-size: 14px;
+      margin-left: 10px;
+    }
+    .product-buttons {
+      margin-top: 10px;
+    }
+    .product-buttons button {
+      padding: 8px 12px;
+      margin-right: 5px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .buy-btn {
+      background-color: #10b981;
+      color: white;
+    }
+    .cart-btn {
+      background-color: #3b82f6;
+      color: white;
+    }
+    .product-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>✨ Fabric Store ✨</h1>
+  <div class="product-list" id="product-list"></div>
+
+  <script>
+    async function loadProducts() {
+      const res = await fetch('/products');
+      const data = await res.json();
+
+      const container = document.getElementById('product-list');
+      data.forEach(product => {
+        const div = document.createElement('div');
+        div.className = 'product';
+        div.innerHTML = `
+          <img src="${product.image}" alt="${product.name}" />
+          <div class="product-name">${product.name}</div>
+          <div>
+            <span class="price">₹${product.discountedPrice}</span>
+            <span class="original-price">₹${product.price}</span>
+          </div>
+          <div class="product-buttons">
+            <button class="cart-btn" onclick='addToCart("${product.name}")'>Add to Cart</button>
+            <button class="buy-btn" onclick='buyNow("${product.name}", ${product.discountedPrice})'>Buy Now</button>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function addToCart(productName) {
+      alert(`🛒 "${productName}" added to cart!`);
+    }
+
+    function buyNow(productName, price) {
+      const message = `Hi, I want to buy "${productName}" for ₹${price}. Please confirm my order.`;
+      const whatsappUrl = `https://wa.me/918106489678?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, '_blank');
+    }
+
+    loadProducts();
+  </script>
+
+</body>
+</html>

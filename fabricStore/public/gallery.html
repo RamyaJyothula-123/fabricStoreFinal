@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fabric Store - Lehengas</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .product-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: 0.3s ease;
+    }
+    .product-card img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+    }
+    .product-card h3 {
+      padding: 10px;
+      margin: 0;
+    }
+    .product-card p {
+      padding: 0 10px 10px;
+      margin: 0;
+    }
+    .product-card del {
+      color: grey;
+    }
+    .buy-btn {
+      display: block;
+      margin: 10px;
+      padding: 10px;
+      background-color: #25D366;
+      color: white;
+      text-align: center;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .buy-btn:hover {
+      background-color: #128C7E;
+    }
+  </style>
+</head>
+<body>
+  <h1>Fabric Store - Lehengas</h1>
+  <div class="product-grid" id="product-list">
+    <!-- Products will be loaded here -->
+  </div>
+
+  <script>
+    fetch('/products')
+      .then(res => res.json())
+      .then(products => {
+        const container = document.getElementById('product-list');
+        products.forEach(product => {
+          const card = document.createElement('div');
+          card.className = 'product-card';
+          card.innerHTML = `
+            <img src="${product.image}" alt="${product.name}" />
+            <h3>${product.name}</h3>
+            <p><del>₹${product.price}</del> <strong>₹${product.discountedPrice}</strong></p>
+            <a class="buy-btn" href="https://wa.me/918106489678?text=Hi! I want to order: ${encodeURIComponent(product.name)} for ₹${product.discountedPrice}" target="_blank">Buy on WhatsApp</a>
+          `;
+          container.appendChild(card);
+        });
+      })
+      .catch(error => {
+        console.error("Failed to load products:", error);
+        document.getElementById('product-list').innerHTML = `<p>Failed to load products. Please try again later.</p>`;
+      });
+  </script>
+</body>
+</html>
