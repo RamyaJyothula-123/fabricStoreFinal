@@ -8,6 +8,7 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.static('public'));
 
+// Your MongoDB connection string
 const uri = "mongodb+srv://admin:Omesairam%40123@cluster0.3jsruxr.mongodb.net/fabricStore?retryWrites=true&w=majority";
 
 mongoose.connect(uri)
